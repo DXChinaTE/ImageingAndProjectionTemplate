@@ -1,0 +1,352 @@
+﻿<Page
+    x:Class="ImageingAndProjectionTemplate.Views.PictureEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ImageingAndProjectionTemplate.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" SizeChanged="Page_SizeChanged" Loaded="Page_Loaded">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Name="projectControlPanel" Visibility="Collapsed" Background="#171717">
+            <RelativePanel Width="200" Height="180" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True">
+                <RelativePanel Name="stopProject" Width="200" Height="80">
+                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="/Assets/MenuIco/bar 08.png" Width="32" Height="32" Stretch="Fill" Margin="16,24,0,0"></Image>
+                        <TextBlock Text="停止投影" Height="25" Width="80" TextAlignment="Center" VerticalAlignment="Center" Foreground="#7FCFF6" FontSize="20" Grid.Column="1" Margin="0,20,0,0"></TextBlock>
+                    </Grid>
+                    <Button  Width="200" Height="80" BorderThickness="0" Opacity="0.05" Name="StopProjectBtn" Click="StopProjectBtn_Click"></Button>
+                    <Border Width="200" Height="80" BorderThickness="1" BorderBrush="#7FCFF6"></Border>
+                </RelativePanel>
+                <RelativePanel Name="NextPage" RelativePanel.Below="stopProject" RelativePanel.AlignLeftWith="stopProject" Width="200" Height="80" Margin="0,20,0,0">
+                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="/Assets/MenuIco/bar 09.png" Width="32" Height="32" Stretch="Fill" Margin="16,24,0,0"></Image>
+                        <TextBlock Text="保存" Height="25" Width="80" TextAlignment="Center" VerticalAlignment="Center" Foreground="#A798FF" FontSize="20" Grid.Column="1" Margin="0,20,0,0"></TextBlock>
+                    </Grid>
+                    <Button  Width="200" Height="80" BorderThickness="0" Opacity="0.05" Name="SaveBtn" Click="SaveBtn_Click"></Button>
+                    <Border Width="200" Height="80" BorderThickness="1" BorderBrush="#A798FF"></Border>
+                </RelativePanel>
+            </RelativePanel>
+        </RelativePanel>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Name="editorGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#181818">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <RelativePanel Grid.Column="0" VerticalAlignment="Stretch" Background="#0b0b0b">
+                    <ListBox Name="menuList" Width="68" VerticalAlignment="Stretch" Background="#0b0b0b" SelectionChanged="menuList_SelectionChanged">
+                        <ListBoxItem Name="listBoxItemCrop" Style="{StaticResource listboxItemStyle}">
+                            <RelativePanel>
+                                <Image Name="clippingImage" Width="30" Height="30"  Margin="19,15,0,0" Source="/Assets/MenuIco/icon 01.png"></Image>
+                                <TextBlock Foreground="White" Text="裁剪" FontSize="15" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="clippingImage" Margin="19,10,0,10"></TextBlock>
+                            </RelativePanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="listBoxItemRotate" Style="{StaticResource listboxItemStyle}">
+                            <RelativePanel>
+                                <Image Name="rotateImage" Width="30" Height="30"  Margin="19,15,0,0" Source="/Assets/MenuIco/icon 02.png"></Image>
+                                <TextBlock Foreground="White" Text="旋转" FontSize="15" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="rotateImage" Margin="19,10,0,10"></TextBlock>
+                            </RelativePanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="listBoxItemText" Style="{StaticResource listboxItemStyle}">
+                            <RelativePanel>
+                                <Image Name="fontImage" Width="30" Height="30"  Margin="19,15,0,0" Source="/Assets/MenuIco/icon 03.png">
+                                </Image>
+                                <TextBlock Foreground="White" Text="文字" FontSize="15" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="fontImage" Margin="19,10,0,10"></TextBlock>
+                            </RelativePanel>
+                        </ListBoxItem>
+                        <ListBoxItem Name="listBoxItemInk" Style="{StaticResource listboxItemStyle}">
+                            <RelativePanel>
+                                <Image Name="inkImage" Width="30" Height="30"  Margin="19,15,0,0" Source="/Assets/MenuIco/icon 04.png"></Image>
+                                <TextBlock Foreground="White" Text="涂鸦" FontSize="15" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="inkImage" Margin="19,10,0,10"></TextBlock>
+                            </RelativePanel>
+                        </ListBoxItem>
+                    </ListBox>
+                    <Grid Name="rotateGrid" Visibility="Collapsed" Background="#0f0f0f" RelativePanel.RightOf="menuList" VerticalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <RelativePanel  Margin="19,15,19,0">
+                            <Image Name="rotateBtnImage" Width="30" Height="30" Source="/Assets/MenuIco/icon 07 2.png" Stretch="Fill"></Image>
+                            <Button Width="30" Height="30" BorderThickness="0" Name="rotateBtn" Click="rotateBtn_Click"></Button>
+                            <TextBlock Name="rotateBtnText" Text="正向" Foreground="#FFA801" RelativePanel.Below="rotateBtn" RelativePanel.AlignHorizontalCenterWith="rotateBtn" Margin="0,10,0,0"></TextBlock>
+                        </RelativePanel>
+                        <RelativePanel Grid.Row="1" Margin="19,15,19,0">
+                            <Image Name="rotateBtnImageRevert" Width="30" Height="30" Source="/Assets/MenuIco/icon 08.png" Stretch="Fill"></Image>
+                            <Button Width="30" Height="30" BorderThickness="0" Name="rotateBtnRevert" Click="rotateBtn_Click"></Button>
+                            <TextBlock Name="rotateBtnTextRevert" Text="反向" Foreground="White" RelativePanel.Below="rotateBtnImageRevert" RelativePanel.AlignHorizontalCenterWith="rotateBtnImageRevert" Margin="0,10,0,0"></TextBlock>
+                        </RelativePanel>
+                    </Grid>
+                    <Grid Name="inkGrid" VerticalAlignment="Stretch" RelativePanel.RightOf="menuList" Background="#0f0f0f">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <RelativePanel>
+                            <ListBox Name="inkMenuList" HorizontalAlignment="Stretch" SelectionChanged="inkMenuList_SelectionChanged">
+                                <ListBoxItem Name="penItem" Background="#0f0f0f">
+                                    <RelativePanel Width="50">
+                                        <Image Width="30" Height="30" Stretch="UniformToFill" Margin="10,15,10,0" Name="penImage" Source="/Assets/MenuIco/pen.png"></Image>
+                                        <TextBlock Text="画笔" Foreground="White" FontSize="15" RelativePanel.Below="penImage" RelativePanel.AlignHorizontalCenterWith="penImage" RelativePanel.AlignBottomWithPanel="True" Margin="0,10,0,10"></TextBlock>
+                                    </RelativePanel>
+                                </ListBoxItem>
+                                <ListBoxItem Name="eraserItem" Background="#0f0f0f">
+                                    <RelativePanel Width="50">
+                                        <Image Width="30" Height="30" Stretch="UniformToFill" Margin="10,15,10,0" Name="eraserImage" Source="/Assets/MenuIco/eraser.png"></Image>
+                                        <TextBlock Text="橡皮" Foreground="White" FontSize="15" RelativePanel.Below="eraserImage" RelativePanel.AlignHorizontalCenterWith="eraserImage" RelativePanel.AlignBottomWithPanel="True" Margin="0,10,0,10"></TextBlock>
+                                    </RelativePanel>
+                                </ListBoxItem>
+                                <ListBoxItem Name="colorItem" Background="#0f0f0f">
+                                    <RelativePanel Width="50">
+                                        <Image Width="30" Height="30" Stretch="UniformToFill" Margin="10,15,10,0" Name="colorImage" Source="/Assets/MenuIco/color.png"></Image>
+                                        <TextBlock Text="颜色" Foreground="White" FontSize="15" RelativePanel.Below="colorImage" RelativePanel.AlignHorizontalCenterWith="colorImage" RelativePanel.AlignBottomWithPanel="True" Margin="0,10,0,10"></TextBlock>
+                                    </RelativePanel>
+                                </ListBoxItem>
+                            </ListBox>
+                            <RelativePanel Name="inkMenuPanel" Visibility="Collapsed" Background="Black" RelativePanel.RightOf="inkMenuList">
+                                <RelativePanel Name="penPanel" Height="105">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="55"/>
+                                            <RowDefinition Height="50" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock FontSize="15" Text="尺寸" Foreground="White" Margin="20,20,0,0"></TextBlock>
+                                        <RelativePanel Grid.Row="1" Height="50" Margin="20,0,0,0">
+                                            <Ellipse Width="30" Height="30" Fill="White" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Name="e1"></Ellipse>
+                                            <Button Width="30" Height="30" BorderThickness="0" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Click="Button_Click"></Button>
+                                            <Ellipse Width="25" Height="25" Fill="White" Name="e2" RelativePanel.LeftOf="e1" RelativePanel.AlignVerticalCenterWith="e1" Margin="0,0,25,0"></Ellipse>
+                                            <Button Width="25" Height="25" BorderThickness="0" RelativePanel.LeftOf="e1" RelativePanel.AlignVerticalCenterWith="e1" Margin="0,0,25,0" Click="Button_Click"></Button>
+                                            <Ellipse Width="20" Height="20" Fill="White" Name="e3" RelativePanel.LeftOf="e2" RelativePanel.AlignVerticalCenterWith="e2" Margin="0,0,20,0"></Ellipse>
+                                            <Button Width="20" Height="20" BorderThickness="0" RelativePanel.LeftOf="e2" RelativePanel.AlignVerticalCenterWith="e2" Margin="0,0,20,0" Click="Button_Click"></Button>
+                                            <Ellipse Width="15" Height="15" Fill="White" Name="e4" RelativePanel.LeftOf="e3" RelativePanel.AlignVerticalCenterWith="e3" Margin="0,0,15,0"></Ellipse>
+                                            <Button Width="15" Height="15" BorderThickness="0" RelativePanel.LeftOf="e3" RelativePanel.AlignVerticalCenterWith="e3" Margin="0,0,15,0" Click="Button_Click"></Button>
+                                            <Ellipse Width="10" Height="10" Fill="White" Name="e5" RelativePanel.LeftOf="e4" RelativePanel.AlignVerticalCenterWith="e4" Margin="0,0,10,0"></Ellipse>
+                                            <Button Width="10" Height="10" BorderThickness="0" RelativePanel.LeftOf="e4" RelativePanel.AlignVerticalCenterWith="e4" Margin="0,0,10,0" Click="Button_Click"></Button>
+                                        </RelativePanel>
+                                    </Grid>
+                                </RelativePanel>
+                                <RelativePanel Name="colorPanel" Height="105" Width="180" Margin="0,220,0,0">
+                                    <Grid Width="160" Height="105" Margin="20,0,0,0" Background="Black" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="45"/>
+                                            <RowDefinition Height="60"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock FontSize="15" Text="尺寸" Foreground="White" Margin="0,25,0,0"></TextBlock>
+                                        <Grid Grid.Row="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="50*"></RowDefinition>
+                                                <RowDefinition Height="50*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                                <ColumnDefinition Width="14.28*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="White"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#12A89D" Grid.Row="0" Grid.Column="1"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#71B383" Grid.Row="0" Grid.Column="2"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#CCD86C" Grid.Row="0" Grid.Column="3"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#DA4654" Grid.Row="0" Grid.Column="4"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#8D5690" Grid.Row="0" Grid.Column="5"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#EE745F" Grid.Row="0" Grid.Column="6"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#EE8E52" Grid.Row="1" Grid.Column="0"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#FAA24B" Grid.Row="1" Grid.Column="1"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#EBC44F" Grid.Row="1" Grid.Column="2"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#4282A6" Grid.Row="1" Grid.Column="3"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#02B8CD" Grid.Row="1" Grid.Column="4"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#8ACD68" Grid.Row="1" Grid.Column="5"></Rectangle>
+                                            <Rectangle Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Fill="#3A3A3C" Grid.Row="1" Grid.Column="6"></Rectangle>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#12A89D" Grid.Row="0" Grid.Column="1" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#71B383" Grid.Row="0" Grid.Column="2" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#CCD86C" Grid.Row="0" Grid.Column="3" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#DA4654" Grid.Row="0" Grid.Column="4" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#8D5690" Grid.Row="0" Grid.Column="5" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#EE745F" Grid.Row="0" Grid.Column="6" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#EE8E52" Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FAA24B" Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#EBC44F" Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#4282A6" Grid.Row="1" Grid.Column="3" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#02B8CD" Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#8ACD68" Grid.Row="1" Grid.Column="5" BorderThickness="0" Click="Button_Click_1"></Button>
+                                            <Button Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#3A3A3C" Grid.Row="1" Grid.Column="6" BorderThickness="0" Click="Button_Click_1"></Button>
+                                        </Grid>
+                                    </Grid>
+                                </RelativePanel>
+                            </RelativePanel>
+                        </RelativePanel>
+                    </Grid>
+                    <Grid Visibility="Collapsed" Name="clippingBarGrid" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#0f0f0f" Width="100" RelativePanel.RightOf="menuList">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"></RowDefinition>
+                            <RowDefinition Height="100"></RowDefinition>
+                            <RowDefinition Height="100"></RowDefinition>
+                            <RowDefinition Height="100"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <AppBarButton Name="bar1" Click="AppBarButton_Click" Style="{StaticResource AppBarStyle}" Label="1 : 1" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFA903">
+                            <AppBarButton.Icon>
+                                <BitmapIcon Width="50" Height="50" Foreground="#FFA903"  UriSource="/Assets/MenuIco/1.png"></BitmapIcon>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarButton Name="bar2" Click="AppBarButton_Click" Grid.Row="1" Style="{StaticResource AppBarStyle}" Label="4 : 3" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">
+                            <AppBarButton.Icon>
+                                <BitmapIcon Width="50" Height="50" Foreground="White"  UriSource="/Assets/MenuIco/2.1.png"></BitmapIcon>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarButton Name="bar3" Click="AppBarButton_Click" Grid.Row="2" Style="{StaticResource AppBarStyle}" Label="9 : 13" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">
+                            <AppBarButton.Icon>
+                                <BitmapIcon Width="50" Height="50" Foreground="White"  UriSource="/Assets/MenuIco/3.1.png"></BitmapIcon>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                        <AppBarButton Name="bar4" Click="AppBarButton_Click" Grid.Row="3" Style="{StaticResource AppBarStyle}" Label="自由变换" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">
+                            <AppBarButton.Icon>
+                                <BitmapIcon Width="50" Height="50" Foreground="White"  UriSource="/Assets/MenuIco/4.1.png"></BitmapIcon>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </Grid>
+                    <Grid Name="textGrid" Background="#0f0f0f"></Grid>
+                </RelativePanel>
+                <RelativePanel Grid.Column="1" Name="imageFrame" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="30,30,30,30">
+                    <RelativePanel Name="imagePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Background="#0f0f0f">
+                        <Image Name="image" Stretch="Uniform" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True">
+                        </Image>
+                        <Image Name="imageInk" Stretch="Uniform" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Visibility="Collapsed">
+                        </Image>
+                        <InkCanvas RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Visibility="{Binding Path=Visibility,ElementName=inkGrid}" Name="ink" Width="{Binding Path=ActualWidth,ElementName=image}" Height="{Binding Path=ActualHeight,ElementName=imagePanel}"></InkCanvas>
+                        <Canvas Name="textCanvas" Visibility="{Binding Path=Visibility,ElementName=textGrid}" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True">
+                            <TextBlock Name="addText" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Red" Text="图片文字" FontSize="25"></TextBlock>
+                        </Canvas>
+                    </RelativePanel>
+                </RelativePanel>
+                <Grid Grid.Column="1" Visibility="{Binding Path=Visibility,ElementName=clippingBarGrid}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Name="clippingGrid" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="0"/>
+                    </Grid.RowDefinitions>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="0">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="1">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="2">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="2">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="0">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="2">
+                        <RelativePanel.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.6"></SolidColorBrush>
+                        </RelativePanel.Background>
+                    </RelativePanel>
+                    <RelativePanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Name="clippingPanel" ManipulationStarted="clippingPanel_ManipulationStarted" ManipulationDelta="clippingPanel_ManipulationDelta" ManipulationCompleted="clippingPanel_ManipulationCompleted" ManipulationMode="All" Width="{Binding Path=ActualWidth,ElementName=image}" Height="{Binding Path=ActualHeight,ElementName=image}">
+                        <Ellipse Name="leftTopClipping" Margin="-5,-5,0,0" Width="10" Height="10" Fill="White"></Ellipse>
+                        <Ellipse Name="rightTopClipping" Margin="0,-5,-5,0" Width="10" Height="10" Fill="White" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True"></Ellipse>
+                        <Ellipse Name="rightButtomClipping" Margin="0,0,-5,-5" Width="10" Height="10" Fill="White" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True"></Ellipse>
+                        <Ellipse Name="leftButtomClipping" Margin="-5,0,0,-5" Width="10" Height="10" Fill="White" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True"></Ellipse>
+                        <Grid RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="33.33*"/>
+                                <ColumnDefinition Width="33.33*"/>
+                                <ColumnDefinition Width="33.33*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="33.33*"/>
+                                <RowDefinition Height="33.33*"/>
+                                <RowDefinition Height="33.33*"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="1"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="2"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="1"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="2"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="0"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"></Border>
+                            <Border BorderThickness="0.1" BorderBrush="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="2"></Border>
+                        </Grid>
+                    </RelativePanel>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Name="buttomBarPanel" Height="50" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#141414">
+                <RelativePanel Height="40" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <RelativePanel Name="acceptBtnPanel" Width="30" Height="30" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Margin="0,5,20,0">
+                        <Image Width="30" Height="30" Source="/Assets/MenuIco/bar 04.png"></Image>
+                        <Button Name="acceptBtn" Click="acceptBtn_Click" Width="30" Height="30" BorderThickness="0" Opacity="0"></Button>
+                    </RelativePanel>
+                    <RelativePanel Name="discardBtnPanel" Width="30" Height="30" RelativePanel.LeftOf="acceptBtnPanel" RelativePanel.AlignBottomWith="acceptBtnPanel" Margin="0,0,20,0">
+                        <Image Width="30" Height="30" Source="/Assets/MenuIco/bar 03.png"></Image>
+                        <Button Name="discardBtn" Click="discardBtn_Click" Width="30" Height="30" BorderThickness="0" Opacity="0"></Button>
+                    </RelativePanel>
+                    <RelativePanel Name="saveBtnPanel" Width="30" Height="30" RelativePanel.LeftOf="discardBtnPanel" RelativePanel.AlignBottomWith="acceptBtnPanel" Margin="0,0,20,0">
+                        <Image Width="30" Height="30" Source="/Assets/MenuIco/bar 02.png"></Image>
+                        <Button Width="30" Height="30" BorderThickness="0" Opacity="0"></Button>
+                    </RelativePanel>
+                    <RelativePanel Name="projectBtnPanel" Width="30" Height="30" RelativePanel.LeftOf="saveBtnPanel" RelativePanel.AlignBottomWith="acceptBtnPanel" Margin="0,0,20,0">
+                        <Image Width="30" Height="30" Source="/Assets/MenuIco/bar 01.png"></Image>
+                        <Button Width="30" Height="30" BorderThickness="0" Opacity="0" Name="projectBtn" Click="projectBtn_Click"></Button>
+                    </RelativePanel>
+                </RelativePanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
